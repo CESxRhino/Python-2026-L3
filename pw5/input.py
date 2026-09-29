@@ -1,4 +1,5 @@
 import math
+import os
 from domains.Student import Student
 from domains.Courses import Courses
 def input_stu():
@@ -10,7 +11,6 @@ def input_stu():
         stu_name = input("\tStudent's Name is: ")
         dob = input("\tStudent's DOB is: ")
         students.append(Student(stu_id, stu_name, dob))
-    return students
     with open("students.txt","w",encoding = "utf-8") as f:
         for s in students:
             f.write(f"{s.get_stu_id()},{s.get_stu_name()},{s.get_dob()}\n")
@@ -24,10 +24,9 @@ def input_cou():
         cou_name = input("\tCourse Name: ")
         credits = int(input("\tCourse Credits: "))
         courses.append(Courses(cou_id, cou_name, credits))
-    return courses
     with open("courses.txt","w",encoding = "utf-8") as f:
             for c in courses:
-                f.write(f"{c.get_cou_id()},{c.get_name()},{s.get_credits()}\n")
+                f.write(f"{c.get_cou_id()},{c.get_name()},{c.get_credits()}\n")
     return courses
 def input_marks(courses, students, marks):
     courses_id = input("\nSelect a course ID: ")
@@ -43,3 +42,28 @@ def input_marks(courses, students, marks):
         for c_id, stu_marks in marks.items():
             for s_id, score in stu_marks.items():
                 f.write(f"{c_id},{s_id},{score}\n")
+def load_data():
+    students = []
+    courses = []
+    marks = {}
+    if os.path.exists('students.txt'):
+        with open('students.txt', 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip():
+                    s_id, name, dob = line.strip().split(',')
+                    students.append(Student(s_id, name, dob))
+    if os.path.exists('courses.txt'):
+        with open('courses.txt', 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip():
+                    c_id, name, credits = line.strip().split(',')
+                    courses.append(Courses(c_id, name, int(credits)))
+    if os.path.exists('marks.txt'):
+        with open('marks.txt', 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip():
+                    c_id, s_id, mark = line.strip().split(',')
+                    if c_id not in marks:
+                        marks[c_id] = {}
+                    marks[c_id][s_id] = float(mark)
+    return students, courses, marks
