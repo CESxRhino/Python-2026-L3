@@ -42,28 +42,3 @@ def input_marks(courses, students, marks):
         for c_id, stu_marks in marks.items():
             for s_id, score in stu_marks.items():
                 f.write(f"{c_id},{s_id},{score}\n")
-def load_data():
-    students = []
-    courses = []
-    marks = {}
-    if os.path.exists('students.txt'):
-        with open('students.txt', 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    s_id, name, dob = line.strip().split(',')
-                    students.append(Student(s_id, name, dob))
-    if os.path.exists('courses.txt'):
-        with open('courses.txt', 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    c_id, name, credits = line.strip().split(',')
-                    courses.append(Courses(c_id, name, int(credits)))
-    if os.path.exists('marks.txt'):
-        with open('marks.txt', 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    c_id, s_id, mark = line.strip().split(',')
-                    if c_id not in marks:
-                        marks[c_id] = {}
-                    marks[c_id][s_id] = float(mark)
-    return students, courses, marks
