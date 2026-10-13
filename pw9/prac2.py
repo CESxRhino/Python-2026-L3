@@ -1,0 +1,28 @@
+import pandas as po1
+import matplotlib.pyplot as po2
+scores_df = po1.read_csv("scores.csv")
+sub = ["math","python","database"]
+po2.figure(figsize = (8,5))
+po2.scatter(scores_df.index,scores_df["math"],label = "math",color = "blue",alpha = 0.7)
+po2.scatter(scores_df.index,scores_df["python"],label = "python",color = "red",alpha = 0.7)
+po2.scatter(scores_df.index,scores_df["database"],label = "database",color = "green",alpha = 0.7)
+po2.title("Student Scores Scatter Plot")
+po2.xlabel("Student Index")
+po2.ylabel("Score")
+po2.grid(True)
+po2.savefig("scattered.png")
+po2.close()
+fig,axs = po2.subplots(1,3,figsize = (15,4),sharey = True)
+for ax,col in zip(axs,sub):
+    ax.hist(scores_df[col].dropna(),bins = 10,edgecolor = "black",color = "skyblue")
+    ax.set(title = "Histogram of {col.capitalize()}",xlabel = "score",ylabel = "frequency")
+    ax.grid(True)
+po2.savefig("histo.png")
+po2.close()
+po2.figure(figsize=(7, 5))
+scores_df.boxplot(column=sub)
+po2.title("Box Plot of Scores (Math, Python, DB)")
+po2.ylabel("Score")
+po2.grid(True)
+po2.savefig("box.png")
+po2.close()
